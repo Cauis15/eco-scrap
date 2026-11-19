@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoScrap - Reciclagem de E-lixo</title>
+
+  <style>
+    /* ===== 1. ESTILO GERAL DA PÁGINA ===== */
+    /* Reset simples: tira margens padrão e define a fonte */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #F1F4F1; /* cinza claro */
+      color: #333333;
+    }
+
+    /* ===== 2. CABEÇALHO E MENU ===== */
+    header {
+      background-color: #2E7D32; /* verde escuro */
+      color: #FFFFFF;
+      text-align: center;
+      padding: 25px 15px 15px 15px;
+    }
+
+    header p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    /* Menu com Flexbox: coloca os botões lado a lado */
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background-color: #2E7D32;
+      padding: 10px 10px 20px 10px;
+    }
+
+    nav button {
+      background-color: #FFFFFF;
+      color: #2E7D32;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      background-color: #C8E6C9;
+    }
+
+    /* ===== 3. ÁREA PRINCIPAL E SEÇÕES ===== */
+    main {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    /* Todas as abas começam escondidas; o JavaScript mostra uma por vez */
+    section {
+      display: none;
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      padding: 25px;
+    }
+
+    /* A aba inicial (Cadastro) já aparece */
+    #cadastro {
+      display: block;
+    }
+
+    h2 {
+      color: #2E7D32;
+      margin-bottom: 15px;
+    }
+
+    /* ===== 4. FORMULÁRIO DE CADASTRO ===== */
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #BDBDBD;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .botao {
+      background-color: #43A047;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .botao:hover {
+      background-color: #2E7D32;
+    }
+
+    #btnCadastrar {
+      margin-top: 20px;
+    }
+
+    /* Mensagem verde de sucesso (começa escondida) */
+    #mensagemSucesso {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      background-color: #C8E6C9;
+      color: #1B5E20;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    /* ===== 5. PONTOS DE COLETA ===== */
+    /* Flexbox: mapa de um lado e lista do outro */
+    .coleta-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Caixa que simula o mapa */
+    .mapa {
+      flex: 1;
+      min-width: 250px;
+      min-height: 300px;
+      background-color: #DCEDC8;
+      border: 2px dashed #7CB342;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #558B2F;
+      font-weight: bold;
+    }
+
+    .lista-pontos {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .ponto {
+      background-color: #F1F4F1;
+      border-left: 5px solid #43A047;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .ponto h3 {
+      color: #2E7D32;
+      margin-bottom: 5px;
+    }
+
+    .ponto .botao {
+      margin-top: 8px;
+    }
+
+    /* Texto da rota (começa vazio e escondido) */
+    .rota {
+      display: none;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555555;
+    }
+
+    /* ===== 6. MINHAS MOEDAS ===== */
+    .cartao-saldo {
+      max-width: 350px;
+      margin: 0 auto 25px auto;
+      background-color: #43A047;
+      color: #FFFFFF;
+      text-align: center;
+      border-radius: 16px;
+      padding: 25px;
+    }
+
+    .cartao-saldo .valor {
+      font-size: 34px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background-color: #2E7D32;
+      color: #FFFFFF;
+      text-align: left;
+      padding: 10px;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #E0E0E0;
+    }
+
+    /* ===== 7. TROCAR MOEDAS ===== */
+    .grade {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .card-recompensa {
+      flex: 1;
+      min-width: 180px;
+      background-color: #F1F4F1;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card-recompensa h3 {
+      margin-bottom: 8px;
+    }
+
+    .card-recompensa p {
+      margin-bottom: 12px;
+      color: #2E7D32;
+      font-weight: bold;
+    }
+
+    /* ===== 8. RODAPÉ ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #666666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== CABEÇALHO: nome do projeto ===== -->
+  <header>
+    <h1>♻️ EcoScrap</h1>
+    <p>Recicle seu lixo eletrônico e ganhe Moedas de Carbono!</p>
+  </header>
+
+  <!-- ===== MENU: cada botão chama a função mostrarAba() com o id da seção ===== -->
+  <nav>
+    <button onclick="mostrarAba('cadastro')">Cadastro</button>
+    <button onclick="mostrarAba('coleta')">Pontos de Coleta</button>
+    <button onclick="mostrarAba('moedas')">Minhas Moedas</button>
+    <button onclick="mostrarAba('trocar')">Trocar Moedas</button>
+  </nav>
+
+  <main>
+
+    <!-- ===== ABA 1: CADASTRO (simulado) ===== -->
+    <section id="cadastro">
+      <h2>Cadastro</h2>
+
+      <label for="perfil">Tipo de perfil</label>
+      <select id="perfil">
+        <option>Usuário Comum</option>
+        <option>Empresa</option>
+        <option>Parceiro (Ponto de Coleta)</option>
+      </select>
+
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" placeholder="Digite seu nome">
+
+      <label for="email">E-mail</label>
+      <input type="text" id="email" placeholder="Digite seu e-mail">
+
+      <label for="cidade">Cidade</label>
+      <input type="text" id="cidade" placeholder="Digite sua cidade">
+
+      <button class="botao" id="btnCadastrar" onclick="cadastrar()">Cadastrar</button>
+
+      <!-- Mensagem que aparece depois do clique -->
+      <p id="mensagemSucesso"></p>
+    </section>
+
+    <!-- ===== ABA 2: PONTOS DE COLETA ===== -->
+    <section id="coleta">
+      <h2>Pontos de Coleta</h2>
+
+      <div class="coleta-container">
+
+        <!-- Caixa que simula o mapa -->
+        <div class="mapa">
+          🗺️ Mapa dos pontos de coleta<br>(simulação)
+        </div>
+
+        <!-- Lista com 3 pontos fictícios -->
+        <div class="lista-pontos">
+
+          <div class="ponto">
+            <h3>EcoPonto Centro</h3>
+            <p>Rua da Aurora, 100 - Centro</p>
+            <p>Horário: Seg a Sex, 8h às 17h</p>
+            <button class="botao" onclick="comoChegar('rota1', 'Siga pela Rua da Aurora por 300 metros e vire à direita. O ponto fica ao lado da praça.')">Como chegar</button>
+            <p class="rota" id="rota1"></p>
+          </div>
+
+          <div class="ponto">
+            <h3>Recicla Shopping</h3>
+            <p>Av. Boa Viagem, 2500 - Boa Viagem</p>
+            <p>Horário: Todos os dias, 10h às 22h</p>
+            <button class="botao" onclick="comoChegar('rota2', 'Entre pelo portão principal do shopping e siga até o estacionamento G1. O ponto fica perto da escada rolante.')">Como chegar</button>
+            <p class="rota" id="rota2"></p>
+          </div>
+
+          <div class="ponto">
+            <h3>Escola Verde</h3>
+            <p>Rua das Flores, 45 - Casa Forte</p>
+            <p>Horário: Sáb, 9h às 13h</p>
+            <button class="botao" onclick="comoChegar('rota3', 'Siga pela Rua das Flores até o final e entre no portão azul da escola. A coleta fica no pátio.')">Como chegar</button>
+            <p class="rota" id="rota3"></p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABA 3: MINHAS MOEDAS ===== -->
+    <section id="moedas">
+      <h2>Minhas Moedas</h2>
+
+      <!-- Cartão central com o saldo -->
+      <div class="cartao-saldo">
+        <p>Seu saldo atual</p>
+        <p class="valor">1.250 Moedas de Carbono</p>
+      </div>
+
+      <h3>Histórico de trocas</h3>
+      <br>
+      <!-- Tabela com o histórico fictício -->
+      <table>
+        <tr>
+          <th>Data</th>
+          <th>Item descartado</th>
+          <th>Moedas ganhas</th>
+        </tr>
+        <tr>
+          <td>05/11/2026</td>
+          <td>Celular antigo</td>
+          <td>500</td>
+        </tr>
+        <tr>
+          <td>20/10/2026</td>
+          <td>Carregador e cabos</td>
+          <td>150</td>
+        </tr>
+        <tr>
+          <td>02/10/2026</td>
+          <td>Notebook quebrado</td>
+          <td>600</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- ===== ABA 4: TROCAR MOEDAS (recompensas) ===== -->
+    <section id="trocar">
+      <h2>Trocar Moedas</h2>
+
+      <div class="grade">
+
+        <div class="card-recompensa">
+          <h3>🎟️ Cupom de desconto</h3>
+          <p>200 moedas</p>
+          <button class="botao" onclick="trocar('Cupom de desconto')">Trocar</button>
+        </div>
+
+        <div class="card-recompensa">
+          <h3>👜 Ecobag</h3>
+          <p>400 moedas</p>
+          <button class="botao" onclick="trocar('Ecobag')">Trocar</button>
+        </div>
+
+        <div class="card-recompensa">
+          <h3>🎧 Fone de ouvido</h3>
+          <p>900 moedas</p>
+          <button class="botao" onclick="trocar('Fone de ouvido')">Trocar</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer>
+    <p>EcoScrap - Projeto escolar do curso técnico em Desenvolvimento de Sistemas</p>
+  </footer>
+
+  <script>
+    // ===== FUNÇÃO 1: troca de abas =====
+    // Esconde todas as seções e mostra só a que foi clicada
+    function mostrarAba(idDaAba) {
+      document.getElementById('cadastro').style.display = 'none';
+      document.getElementById('coleta').style.display = 'none';
+      document.getElementById('moedas').style.display = 'none';
+      document.getElementById('trocar').style.display = 'none';
+
+      document.getElementById(idDaAba).style.display = 'block';
+    }
+
+    // ===== FUNÇÃO 2: cadastro simulado =====
+    // Não recarrega a página: só mostra a mensagem verde
+    function cadastrar() {
+      var mensagem = document.getElementById('mensagemSucesso');
+      mensagem.innerText = 'Cadastro aprovado com sucesso!';
+      mensagem.style.display = 'block';
+    }
+
+    // ===== FUNÇÃO 3: botão "Como chegar" =====
+    // Recebe o id do parágrafo e o texto da rota, e mostra na tela
+    function comoChegar(idDaRota, texto) {
+      var rota = document.getElementById(idDaRota);
+      rota.innerText = '📍 ' + texto;
+      rota.style.display = 'block';
+    }
+
+    // ===== FUNÇÃO 4: botão "Trocar" =====
+    // Mostra um alerta simples de confirmação
+    function trocar(nomeDoItem) {
+      alert('Troca realizada com sucesso! Você resgatou: ' + nomeDoItem);
+    }
+  </script>
+
+</body>
+</html>
